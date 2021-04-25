@@ -32,9 +32,12 @@ const usuarioSchema = Schema({
     },
 });
 
+// usuarioSchema es el modelo de mongo
 // Debe ser una función normal porque se va a referenciar a la instancia del objeto usando this
 usuarioSchema.methods.toJSON = function () {
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+    usuario.uid = _id;// Cambio el _id de la respuesta por uid
+
     return usuario;
 }
 

@@ -79,15 +79,26 @@ const usuariosPut = async (req = request, res = response) => {
 }
 
 const usuariosDelete = async (req, res = response) => {
-    const id = req.params.id;
+    const { id } = req.params;
 
     // Borrado físico
     // const usuario = await Usuario.findByIdAndDelete(id);
 
+    const usuarioAutenticado = req.usuario;
+
+    // Verifico si es Administrador
+    if (usuarioAutenticado.rol != 'ADMIN_ROLE') {
+        return res.status(403).json({
+            msg: 'Sin permiso.'
+        });
+    }
+
     // Borrado lógico
     const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
 
-    res.json(usuario);
+    res.json({
+        usuario
+    });
 }
 
 module.exports = {
